@@ -1,0 +1,9 @@
+.venv/
+.pytest_cache/
+__pycache__/
+*.pyc
+.env
+AGENTS.md
+PROJECTTRACKER.md
+config/firebase_service_account.json
+config/stratus-spoon-v2-firebase-adminsdk-fbsvc-21463475c5.json
