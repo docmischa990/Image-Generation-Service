@@ -22,6 +22,7 @@ Create `.env` in the project root:
 COMFYUI_URL=http://GPU-IP:8188
 FIREBASE_STORAGE_BUCKET=stratus-spoon-v2.appspot.com
 FIREBASE_SERVICE_ACCOUNT_PATH=config/firebase_service_account.json
+CORS_ALLOW_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 COMFYUI_CHECKPOINT_NAME=sd_xl_base_1.0.safetensors
 ```
 
@@ -59,4 +60,7 @@ Successful response:
 ## Notes
 
 - The service generates the image through ComfyUI, stores the temporary file under `/tmp`, uploads it to Firebase Storage, and then deletes the local file.
+- Cross-origin browser access is controlled by `CORS_ALLOW_ORIGINS` as a comma-separated list of allowed frontend origins.
 - `.env` and `config/firebase_service_account.json` are intentionally ignored by Git.
+
+

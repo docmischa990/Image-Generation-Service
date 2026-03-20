@@ -15,6 +15,10 @@ class Settings(BaseModel):
     comfyui_url: str
     firebase_storage_bucket: str
     firebase_service_account_path: Path = Path("config/firebase_service_account.json")
+    cors_allow_origins: tuple[str, ...] = (
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    )
     comfyui_request_timeout_seconds: int = 30
     comfyui_generation_timeout_seconds: int = 180
     comfyui_poll_interval_seconds: int = 2
@@ -29,6 +33,15 @@ class Settings(BaseModel):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
+    cors_allow_origins = tuple(
+        origin.strip()
+        for origin in os.getenv(
+            "CORS_ALLOW_ORIGINS",
+            "http://localhost:5173,http://127.0.0.1:5173",
+        ).split(",")
+        if origin.strip()
+    )
+
     return Settings(
         comfyui_url=os.environ["COMFYUI_URL"],
         firebase_storage_bucket=os.environ["FIREBASE_STORAGE_BUCKET"],
@@ -38,6 +51,7 @@ def get_settings() -> Settings:
                 "config/firebase_service_account.json",
             )
         ),
+        cors_allow_origins=cors_allow_origins,
         comfyui_request_timeout_seconds=int(
             os.getenv("COMFYUI_REQUEST_TIMEOUT_SECONDS", "30")
         ),

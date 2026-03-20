@@ -55,8 +55,9 @@ class ComfyUIClient:
             )
             self._raise_for_status(response, "Failed to fetch ComfyUI history")
 
-            history = response.json().get(prompt_id)
-            if history:
+            data = response.json()
+            history = data.get(prompt_id) or data
+            if history and history.get("outputs"):
                 return self._extract_image_metadata(history)
 
             time.sleep(self.settings.comfyui_poll_interval_seconds)

@@ -1,11 +1,13 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api.routes import router as image_router
 from app.clients.comfy_client import ComfyUIError, ComfyUITimeoutError
 from app.clients.firebase_storage import FirebaseStorageError, initialize_firebase
+from app.config import get_settings
 
 
 @asynccontextmanager
@@ -20,6 +22,16 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+settings = get_settings()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=list(settings.cors_allow_origins),
+    allow_credentials=False,
+    allow_methods=["POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Accept"],
+)
+
 app.include_router(image_router)
 
 

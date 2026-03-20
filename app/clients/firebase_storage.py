@@ -49,6 +49,8 @@ class FirebaseStorageClient:
             blob.upload_from_filename(str(image_path), content_type="image/png")
             blob.make_public()
         except Exception as exc:  # pragma: no cover - firebase-admin raises mixed types
-            raise FirebaseStorageError("Failed to upload generated image to Firebase") from exc
+            raise FirebaseStorageError(
+                f"Failed to upload generated image to Firebase: {exc}"
+            ) from exc
 
         return blob.public_url
